@@ -1,0 +1,16 @@
+{
+    "url" : "https://google.com/",
+    "endpoints": {
+        "authentication": "Authenticate/",
+        "checkJWT": "",
+        "createAccount": "User/",
+        "checkUsernameExists": "ResetPassword/",
+        "resetPassword": "ResetPassword/",
+        "protestsList": "Protests/",
+        "Search": "Search/",
+        "paricipants": "",
+        "countries": "",
+        "cities": "",
+        "purposes": ""
+    }
+}

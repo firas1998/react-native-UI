@@ -1,0 +1,18 @@
+{
+    "errors": {
+        "color": "#cc0000",
+        "font": "Arial"
+    },
+    "background": {
+        "color": ""
+    },
+    "text": {
+        "color": "",
+        "font": ""
+    },
+    "textInput": {
+        "height": 50,
+        "width": 250,
+        "borderRadius": 5
+    }
+}
