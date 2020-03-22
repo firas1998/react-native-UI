@@ -21,12 +21,12 @@ const instructions = Platform.select({
 
 const RootStack = createStackNavigator(
   {
-    
+    ProtestList: { screen: ProtestList },
     Login: { screen: Login },
     CreateAccount: { screen: CreateAccount},
     PasswordReset: { screen: PasswordReset },
     FilterProtests: { screen: FilterProtests },
-    ProtestList: { screen: ProtestList },
+    
     Search: { screen: Search },
   }
 );

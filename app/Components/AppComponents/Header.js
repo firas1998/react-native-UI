@@ -112,6 +112,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         flex: 1,
         flexDirection: "row",
+        borderBottomWidth: 1,
     },
 
     emptyBox: {

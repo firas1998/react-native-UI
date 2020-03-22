@@ -5,13 +5,10 @@ import {
     AsyncStorage,
     Text,
     TouchableOpacity,
-    Picker,
-    Modal,
 } from 'react-native';
-import DateTimePicker from 'react-native-modal-datetime-picker';
-import Icon from 'react-native-vector-icons/MaterialIcons';
-import moment from 'moment';
-import OptionsList from './OptionsList.js';
+import DatePicker from './../../../AppComponents/DatePicker';
+import RNPickerSelect from 'react-native-picker-select';
+import Icon from 'react-native-vector-icons/AntDesign';
 
 const apiData = require('./../../../../Global/ApiData.json');
 
@@ -32,7 +29,7 @@ export default class FilterProtestForm extends React.Component {
             isEndPickerVisible: false,
             isStartDateSet: false,
             isEndDateSet: false,
-            cities: [{ cityID: -1, cityName: '' }, { cityID: 1, cityName: 'test' }, { cityID: 2, cityName: 'test1' }, { cityID: 3, cityName: 'test2' }, { cityID: 4, cityName: 'test3' }, { cityID: 5, cityName: 'test4' }],
+            cities: [{ value: -1, label: '' }, { value: 1, label: 'test' }, { value: 2, label: 'test1' }, { value: 3, label: 'test2' }, { value: 4, label: 'test3' }, { value: 5, label: 'test4' }],
             countries: [{ cityID: -1, cityName: '' }, { cityID: 1, cityName: 'test' }, { cityID: 2, cityName: 'test1' }, { cityID: 3, cityName: 'test2' }, { cityID: 4, cityName: 'test3' }, { cityID: 5, cityName: 'test4' }],
             purposes: [{ cityID: -1, cityName: '' }, { cityID: 1, cityName: 'test' }, { cityID: 2, cityName: 'test1' }, { cityID: 3, cityName: 'test2' }, { cityID: 4, cityName: 'test3' }, { cityID: 5, cityName: 'test4' }],
             isModalVisible: false,
@@ -164,243 +161,176 @@ export default class FilterProtestForm extends React.Component {
         this.setState({ cities: response.json() })
     }
 
-    onConfirmStart = ({ startDate }) => {
-        this.setState({ isStartPickerVisible: false, startDate: moment(startDate).format('DD/MM/YYYY'), isStartDateSet: true });
-    }
-
-    openStartPicker = () => {
-        this.setState({ isStartPickerVisible: true });
-    }
-
-    onCancel = () => {
-        this.setState({ isStartPickerVisible: false, isEndPickerVisible: false });
-    }
-
-    onConfirmEnd = ({ endDate }) => {
-        this.setState({ isEndPickerVisible: false, endDate: moment(endDate).format('DD/MM/YYYY'), isEndDateSet: true });
-    }
-
-    openEndPicker = () => {
-        this.setState({ isEndPickerVisible: true });
+    onConfirmStart = (startDate) => {
+        this.setState({ isStartPickerVisible: false, startDate: startDate, isStartDateSet: true });
     }
 
     removeStartDate = () => {
         this.setState({ isStartPickerVisible: false, startDate: '______________', isStartDateSet: false });
     }
 
+    onConfirmEnd = (endDate) => {
+        this.setState({ isEndPickerVisible: false, endDate: endDate, isEndDateSet: true });
+    }
+
     removeEndDate = () => {
-        this.setState({ isStartPickerVisible: false, endDate: '______________', isEndDateSet: false });
+        this.setState({ isEndPickerVisible: false, endDate: '______________', isEndDateSet: false });
     }
 
-    onChangeCity = (cityID, city) => {
-        this.setState({ cityID: cityID, city: city });
+    setCity = (cityID) => {
+        console.log(cityID);
+        this.setState({ cityID: cityID });
     }
 
-    onChangeCountry = (countryID, country) => {
-        this.setState({ countryID: countryID, country: country });
-        countryID === 0 ? this.setState({ cities: this.getCities() }) : this.setState({ cities: this.getCitiesInCountry(countryID) });
+    setCountry = (countryID) => {
+        this.setState({ countryID: countryID });
     }
 
-    onChangePurpose = (purposeID, purpose) => {
-        this.setState({ purposeID: purposeID, purpose: purpose });
+    setPurpose = (purposeID) => {
+        this.setState({ purposeID: purposeID });
     }
 
-    changeModalVisibility = (visible) => {
-        this.setState({ isModalVisible: visible });
-    }
-
-    setSelectedItem = (itemType, id, name) => {
-        console.log(itemType);
-        switch (itemType) {
-            case 0:
-                this.setState({ cityID: id, city: name, isModalVisible: false });
-                break;
-            case 1:
-                this.setState({ countryID: id, country: name, isModalVisible: false });
-                break;
-            case 2:
-                this.setState({ purposeID: id, purpose: name, isModalVisible: false });
-                break;
-        }
-    }
 
     render() {
+
+        const countryPickerPlaceholder = {
+            label: 'Select a country...',
+            value: -1,
+            color: '#9EA0A4',
+        };
+
+        const cityPickerPlaceholder = {
+            label: 'Select a city...',
+            value: -1,
+            color: '#9EA0A4',
+        };
+
+        const purposePickerPlaceholder = {
+            label: 'Select a purpose...',
+            value: -1,
+            color: '#9EA0A4',
+        };
 
         return (
             <View style={styles.container} >
 
+                <View style={styles.dateContainers} >
+
+                    <DatePicker name='From' onConfirm={this.onConfirmStart} onDelete={this.removeStartDate} />
+
+                    <DatePicker name='To' onConfirm={this.onConfirmEnd} onDelete={this.removeEndDate} />
+
+                </View>
+
                 <View style={styles.inputContainers} >
 
-                    <View style={styles.datePicker}>
+                    <View style={styles.pickerContainer} >
 
-                        <View style={styles.labelContainer}>
-
-                            <View style={styles.textLabel}>
-
-                                <Text style={styles.label} >From</Text>
-
-                            </View>
-
-                            {
-                                this.state.isStartDateSet && (
-                                    <View style={styles.iconLabel}>
-                                        <Icon style={styles.iconStart} name='cancel' size={20} onPress={this.removeStartDate} />
-                                    </View>
-                                )}
-
-                        </View>
-
-                        <TouchableOpacity style={styles.dateStyle} onPress={this.openStartPicker} >
-                            <Text style={styles.dateDisplay} >{this.state.startDate}</Text>
-                        </TouchableOpacity>
+                        <RNPickerSelect
+                            style={pickers}
+                            placeholder={countryPickerPlaceholder}
+                            onValueChange={this.setCountry}
+                            items={this.state.cities}
+                            Icon={()=> {return (<Icon name='down' size={20} />);}}
+                        />
 
                     </View>
 
-                    <DateTimePicker
-                        isVisible={this.state.isStartPickerVisible}
-                        onConfirm={this.onConfirmStart}
-                        onCancel={this.onCancel}
-                        mode={'date'}
+                </View>
 
-                    />
+                <View style={styles.inputContainers} >
 
-                    <View style={styles.datePicker} >
+                    <View style={styles.pickerContainer} >
 
-                        <View style={styles.labelContainer}>
-
-                            <View style={styles.textLabel}>
-
-                                <Text style={styles.label} >To</Text>
-
-                            </View>
-
-                            {
-                                this.state.isEndDateSet && (
-                                    <View style={styles.iconLabel}>
-                                        <Icon style={styles.iconEnd} name='cancel' size={20} onPress={this.removeEndDate} />
-                                    </View>
-                                )}
-
-
-                        </View>
-
-                        <TouchableOpacity style={styles.dateStyle} onPress={this.openEndPicker} >
-                            <Text style={styles.dateDisplay} >{this.state.endDate}</Text>
-                        </TouchableOpacity>
+                        <RNPickerSelect
+                            style={pickers}
+                            placeholder={cityPickerPlaceholder}
+                            onValueChange={this.setCity}
+                            items={this.state.cities}
+                            Icon={()=> {return (<Icon name='down' size={20} />);}}
+                        />
 
                     </View>
 
-                    <DateTimePicker
-                        isVisible={this.state.isEndPickerVisible}
-                        onConfirm={this.onConfirmEnd}
-                        onCancel={this.onCancel}
-                        mode={'date'}
-
-                    />
-
-
-
                 </View>
 
                 <View style={styles.inputContainers} >
 
-                    <TouchableOpacity onPress={() => this.changeModalVisibility(true)}>
-                        {(this.state.cityID === -1 && (<Text>Select city</Text>)) || <Text>{this.state.city}</Text>}
-                    </TouchableOpacity>
-                    <Modal visible={this.state.isModalVisible} onRequestClose={() => this.changeModalVisibility(false)} animationType='fade'>
+                    <View style={styles.pickerContainer} >
 
-                        <OptionsList
-                            type={0} data={this.state.cities}
-                            setItem={this.setSelectedItem}
-                            changeModalVisibility={this.changeModalVisibility}
-                            selectedID={this.state.cityID}
+                        <RNPickerSelect
+                            style={pickers}
+                            placeholder={purposePickerPlaceholder}
+                            onValueChange={this.setPurpose}
+                            items={this.state.cities}
+                            Icon={()=> {return (<Icon name='down' size={20} />);}}
                         />
 
-                    </Modal>
+                    </View>
 
                 </View>
 
-                <View style={styles.inputContainers} >
+                <View style={styles.inputContainers}>
 
-                    <TouchableOpacity onPress={() => this.changeModalVisibility(true)}>
+                    <TouchableOpacity style={styles.submitContainer} >
 
-                        {(this.state.cityID === -1 && (<Text>Select country</Text>)) || <Text>{this.state.city}</Text>}
-
-                    </TouchableOpacity>
-
-                    <Modal visible={this.state.isModalVisible} onRequestClose={() => this.changeModalVisibility(false)} animationType='fade'>
-
-                        <OptionsList
-                            type={1} data={this.state.countries}
-                            setItem={this.setSelectedItem}
-                            changeModalVisibility={this.changeModalVisibility}
-                            selectedID={this.state.countryID}
-                        />
-
-                    </Modal>
-
-                </View>
-
-                <View style={styles.inputContainers} >
-
-                    <TouchableOpacity onPress={() => this.changeModalVisibility(true)}>
-
-                        {(this.state.cityID === -1 && (<Text>Select purpose</Text>)) || <Text>{this.state.city}</Text>}
+                        <Text style={styles.submitText} onPress={() => this.onFilter()}>Filter</Text>
 
                     </TouchableOpacity>
 
-                    <Modal visible={this.state.isModalVisible} onRequestClose={() => this.changeModalVisibility(false)} animationType='fade'>
-
-                        <OptionsList
-                            type={2} data={this.state.purposes}
-                            setItem={this.setSelectedItem}
-                            changeModalVisibility={this.changeModalVisibility}
-                            selectedID={this.state.purposeID}
-                        />
-
-                    </Modal>
-
                 </View>
-
-                <TouchableOpacity style={styles.submitContainer} >
-
-                </TouchableOpacity>
 
             </View>
         );
     }
 
-
+    onFilter = () => {
+        alert("filtering");
+    }
 
 
 }
 
-const globalStyles = require('./../../../../Global/GlobalStyles.json');
-
 const styles = StyleSheet.create({
+
+    pickerContainer: {
+        justifyContent: "center",
+        flex: 1,
+    },
 
     container: {
         flex: 12,
         backgroundColor: '#fff',
-        paddingLeft: 40,
-        paddingRight: 40,
+        paddingLeft: 30,
+        paddingRight: 30,
         paddingTop: 20,
+    },
+
+    dateContainers: {
+        flex: 1,
+        flexDirection: "row",
+        alignContent: "center",
+        justifyContent: 'center',
     },
 
     inputContainers: {
         flex: 1,
-        flexDirection: "row",
         alignContent: "center",
-        justifyContent: "center",
-        borderWidth: 1,
+        justifyContent: 'center',
     },
 
     submitContainer: {
-        flex: 1,
-        alignContent: "center",
+        height: 50 ,
+        alignItems: "center",
         justifyContent: "center",
-        borderWidth: 1,
-        backgroundColor: 'blue',
+        alignSelf: 'stretch',
+        backgroundColor: '#01c853',
+        borderRadius: 5,
+    },
+
+    submitText: {
+        color: '#fff',
+        fontSize: 18
     },
 
     datePicker: {
@@ -452,4 +382,31 @@ const styles = StyleSheet.create({
         flex: 1,
     },
 
+
+
+});
+
+const pickers = StyleSheet.create({
+
+    inputIOS: {
+        borderWidth: 1,
+        color: 'black',
+        fontSize: 22,
+        height: 50,
+        borderRadius: 5,
+        paddingHorizontal: 12,
+    },
+
+    inputAndroid: {
+        borderWidth: 1,
+        color: 'black',
+        fontSize: 20,
+        height: 50,
+        borderRadius: 5,
+    },
+
+    iconContainer: {
+        height: '100%',
+        justifyContent: 'center',
+    }
 });
