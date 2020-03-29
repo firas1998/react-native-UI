@@ -11,6 +11,10 @@
         "paricipants": "",
         "countries": "",
         "cities": "",
-        "purposes": ""
+        "purposes": "",
+        "getUser": "User/",
+        "protestsCreated": "Protests/user/created/",
+        "protestsParticipated": "Protests/user/participated/",
+        "": ""
     }
 }

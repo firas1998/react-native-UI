@@ -4,7 +4,6 @@ import Header from '../AppComponents/Header';
 import { getStatusBarHeight } from 'react-native-status-bar-height';
 import ListOfProtests from './ProtestListComponents/ListOfProtests';
 import NavBar from './../AppComponents/NavBar';
-import Expo from 'expo';
 
 export default class ProtestList extends React.Component {
 
@@ -13,15 +12,36 @@ export default class ProtestList extends React.Component {
     }
 
     render() {
+
+        if(this.props.navigation.getParams("protestListType", 0) === 0){
+            return this.renderMainProtestListPage();
+        }
+        return this.renderOtherProtestListPage();
+    }
+
+    renderMainProtestListPage = () => {
         return (
 
             <View style={styles.container}>
 
                 <Header navigation={this.props.navigation} onProtestList={true} filterOpened={false} />
 
-                <View style={styles.exampleBig}><Text>dasdasdsa</Text></View>
+                <ListOfProtests style={styles.exampleBig} type={this.props.navigation.getParams("type", 0)} />
 
                 <NavBar navigation={this.props.navigation} />
+
+            </View>
+        );
+    }
+
+    renderOtherProtestListPage = () => {
+        return (
+
+            <View style={styles.container}>
+
+                <Header navigation={this.props.navigation} onProtestList={true} filterOpened={false} />
+
+                <ListOfProtests style={styles.exampleBig} type={this.props.navigation.getParams("type", 0)} />
 
             </View>
         );

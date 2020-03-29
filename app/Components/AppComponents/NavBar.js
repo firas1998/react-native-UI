@@ -3,6 +3,7 @@ import {
     View,
     StyleSheet,
     Image,
+    AsyncStorage,
 } from 'react-native';
 import Icon1 from 'react-native-vector-icons/MaterialIcons';
 import Icon2 from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -10,11 +11,36 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 
 export default class NavBar extends React.Component {
 
+    constructor(props) {
+        super(props);
+        this.username = "";
+    }
+
+    static navigationOptions = {
+        headerShown: false,
+    }
+
+    componentDidMount() {
+        //this.getUsername();
+    }
+
+    getUsername = async () => {
+        var username = await AsyncStorage.getItem('username');
+
+        if (username === null) {
+            alert('Your session ended. Please login');
+            this.props.navigation.navigate('Login');
+            return;
+        }
+
+        this.username = username;
+    }
+
     render() {
         return (
-            <View style={styles.container} >
+            <View style={styles.container}>
 
-                <View style={styles.protestsTabContainer} >
+                <View style={styles.protestsTabContainer}>
                     <TouchableOpacity onPress={() => this.goToProtestsList()}>
                         <Image style={styles.logo} source={require('./../../Assets/logoExample.jpg')} />
                     </TouchableOpacity>
@@ -38,18 +64,17 @@ export default class NavBar extends React.Component {
     }
 
     goToProtestsList = () => {
-        alert('go to protests list');
-        this.props.navigation.navigate('ProtestList');
+        this.props.navigation.setParams({protestListType: 0});
+        this.props.navigation.push('ProtestList');
     }
 
     goToSearch = () => {
-        alert('go to search');
         this.props.navigation.navigate('Search');
     }
 
     goToProfile = () => {
-        alert('go to user');
-        this.props.navigation.navigate('Profile');
+        this.props.navigation.setParams({username: "qqq"}); //put this.username
+        this.props.navigation.navigate('User');
     }
 }
 

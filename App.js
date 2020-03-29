@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
 import {
   Platform,
-  StyleSheet,
-  Text,
-  View
+  StyleSheet
 } from 'react-native';
 import { createStackNavigator } from 'react-navigation-stack';
 import { createAppContainer } from 'react-navigation';
@@ -13,6 +11,7 @@ import PasswordReset from './app/Components/PasswordReset/PasswordReset'
 import ProtestList from './app/Components/ProtestList/ProtestList';
 import FilterProtests from './app/Components/ProtestList/FilterProtests/FilterProtests';
 import Search from './app/Components/Search/Search';
+import User from './app/Components/User/User'
 
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
@@ -21,6 +20,7 @@ const instructions = Platform.select({
 
 const RootStack = createStackNavigator(
   {
+    User: {screen: User},
     ProtestList: { screen: ProtestList },
     Login: { screen: Login },
     CreateAccount: { screen: CreateAccount},

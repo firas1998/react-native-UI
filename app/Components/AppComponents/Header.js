@@ -7,6 +7,7 @@ import {
 } from 'react-native';
 import Icon1 from 'react-native-vector-icons/AntDesign';
 import Icon2 from 'react-native-vector-icons/FontAwesome';
+import { getStatusBarHeight } from 'react-native-status-bar-height';
 
 export default class Header extends React.Component {
 
@@ -113,6 +114,7 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: "row",
         borderBottomWidth: 1,
+        paddingTop: getStatusBarHeight(),
     },
 
     emptyBox: {
