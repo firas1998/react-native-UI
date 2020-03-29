@@ -96,6 +96,7 @@ export default class LoginForm extends React.Component {
 
         AsyncStorage.setItem('jwt', response.json().jwt);
         AsyncStorage.setItem('username', response.json().username);
+        this.props.navigation.setParams({protestListType: 0, goBackActive: false});
         this.props.navigation.navigate('ProtestsList');
     }
 

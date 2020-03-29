@@ -13,7 +13,7 @@ export default class ProtestList extends React.Component {
 
     render() {
 
-        if(this.props.navigation.getParams("protestListType", 0) === 0){
+        if (this.props.navigation.getParams("protestListType", 0) === 0) {
             return this.renderMainProtestListPage();
         }
         return this.renderOtherProtestListPage();
@@ -24,7 +24,11 @@ export default class ProtestList extends React.Component {
 
             <View style={styles.container}>
 
-                <Header navigation={this.props.navigation} onProtestList={true} filterOpened={false} />
+                <Header
+                    navigation={this.props.navigation}
+                    onProtestList={true}
+                    filterOpened={false}
+                    goBackActive={this.props.navigation.getParam("goBackActive", false)} />
 
                 <ListOfProtests style={styles.exampleBig} type={this.props.navigation.getParams("type", 0)} />
 
@@ -39,7 +43,12 @@ export default class ProtestList extends React.Component {
 
             <View style={styles.container}>
 
-                <Header navigation={this.props.navigation} onProtestList={true} filterOpened={false} />
+                <Header
+                    navigation={this.props.navigation}
+                    onProtestList={true}
+                    filterOpened={false}
+                    goBackActive={this.props.navigation.getParam("goBackActive", false)} />
+                />
 
                 <ListOfProtests style={styles.exampleBig} type={this.props.navigation.getParams("type", 0)} />
 
@@ -47,7 +56,7 @@ export default class ProtestList extends React.Component {
         );
     }
 }
-//<ListOfProtests />
+
 const globalStyles = require('./../../Global/GlobalStyles.json');
 
 const styles = StyleSheet.create({

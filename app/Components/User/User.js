@@ -45,7 +45,7 @@ export default class User extends React.Component {
     }
 
     getUser = async () => {
-        var username = this.props.username;
+        var username = this.props.navigation.getParam('username', 'name not found');
 
         const completeURL = apiData.url.concat(apiData.endpoints.getUser, username);
 
@@ -122,12 +122,12 @@ export default class User extends React.Component {
     }
 
     protestsPaticipatedIn = () => {
-        this.props.navigation.setParams({protestListType: 2});
+        this.props.navigation.setParams({protestListType: 2, goBackActive: true});
         this.props.navigation.push('ProtestList');
     }
 
     protestsCreated = () => {
-        this.props.navigation.setParams({protestListType: 1});
+        this.props.navigation.setParams({protestListType: 1, goBackActive: true});
         this.props.navigation.push('ProtestList');
     }
 }

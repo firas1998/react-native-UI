@@ -7,6 +7,7 @@ import {
 } from 'react-native';
 import Icon1 from 'react-native-vector-icons/AntDesign';
 import Icon2 from 'react-native-vector-icons/FontAwesome';
+import Icon3 from 'react-native-vector-icons/Ionicons';
 import { getStatusBarHeight } from 'react-native-status-bar-height';
 
 export default class Header extends React.Component {
@@ -17,15 +18,43 @@ export default class Header extends React.Component {
         if (this.props.onProtestList) {
             return this.props.filterOpened ? this.renderProjectListFilterOpened() : this.renderProjectListFilterClosed();
         }
+        if(this.props.goBackActive){
+            return this.renderNormalHeaderWithBackButton();
+        }
+
         return this.renderNormalHeader();
 
     }
 
-    renderNormalHeader(){
+    renderNormalHeaderWithBackButton() {
         return (
             <View style={styles.container}>
 
-                <View style={styles.emptyBox}>
+                <View style={styles.backContainer}>
+                    <Icon1 name='ios-arrow-back' size={30} onPress={() => this.goBack()} />
+                </View>
+
+                <View style={styles.titleContainer}>
+
+                    <Image style={styles.logo} source={require('./../../Assets/logoExample.jpg')} />
+
+                    <Text style={styles.title} > Rize </Text>
+
+                </View>
+
+                <View style={styles.filterContainer}>
+
+                </View>
+
+            </View>
+        );
+    }
+
+    renderNormalHeader() {
+        return (
+            <View style={styles.container}>
+
+                <View style={styles.backContainer}>
 
                 </View>
 
@@ -38,7 +67,7 @@ export default class Header extends React.Component {
                 </View>
 
                 <View style={styles.filterContainer}>
-                    
+
                 </View>
 
             </View>
@@ -50,7 +79,7 @@ export default class Header extends React.Component {
         return (
             <View style={styles.container}>
 
-                <View style={styles.emptyBox}>
+                <View style={styles.backContainer}>
 
                 </View>
 
@@ -76,7 +105,7 @@ export default class Header extends React.Component {
         return (
             <View style={styles.container}>
 
-                <View style={styles.emptyBox}>
+                <View style={styles.backContainer}>
 
                 </View>
 
@@ -90,12 +119,16 @@ export default class Header extends React.Component {
 
                 <View style={styles.filterContainer}>
 
-                    <Icon2 name='filter' size={30} onPress={() => this.props.filterOpened ? this.closeFilter() : this.openFilter() } />
+                    <Icon2 name='filter' size={30} onPress={() => this.props.filterOpened ? this.closeFilter() : this.openFilter()} />
 
                 </View>
 
             </View>
         );
+    }
+
+    goBack = () => {
+        this.props.navigation.goBack();
     }
 
     openFilter = () => {
@@ -117,7 +150,7 @@ const styles = StyleSheet.create({
         paddingTop: getStatusBarHeight(),
     },
 
-    emptyBox: {
+    backContainer: {
         flex: 1,
         alignItems: "center",
         justifyContent: 'center',
@@ -130,7 +163,7 @@ const styles = StyleSheet.create({
         justifyContent: "center",
     },
 
-    title:{
+    title: {
         fontWeight: "bold",
         fontSize: 30,
     },
